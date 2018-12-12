@@ -1,9 +1,9 @@
-
+ï»¿
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
-
+using System.Reflection;
 
 public enum GameEventType
 {
@@ -14,14 +14,15 @@ public enum GameEventType
 }
 
 /// <summary>
-/// ÊÂ¼ş¹ÜÀíÏµÍ³
-/// ¹Û²ìÕßÄ£Ê½£ºSubjectÓÃList±£´æ Observer
-///             ¶à¸öSubject¶à¸öObserver,Subject¸ºÔğ½«ObserverĞèÒªµÄ²ÎÊı±£´æÏÂÀ´,È»ºóÔÙNotify¸æËßObserver
-/// ¸ºÔğ£ºÊ¿±ø¡¢µĞÈËËÀÍöºÍĞÂ¹Ø¿¨ÊÂ¼ş´¦Àí
+/// äº‹ä»¶ç®¡ç†ç³»ç»Ÿ
+/// è§‚å¯Ÿè€…æ¨¡å¼ï¼šSubjectç”¨Listä¿å­˜ Observer
+///             å¤šä¸ªSubjectå¤šä¸ªObserver,Subjectè´Ÿè´£å°†Observeréœ€è¦çš„å‚æ•°ä¿å­˜ä¸‹æ¥,ç„¶åå†Notifyå‘Šè¯‰Observer
+/// è´Ÿè´£ï¼šå£«å…µã€æ•Œäººæ­»äº¡å’Œæ–°å…³å¡äº‹ä»¶å¤„ç†
+/// åˆ©ç”¨åå°„åŠ¨æ€åˆ›å»º Subject. 
 /// </summary>
 public class GameEventSystem : IGameSystem {
     /// <summary>
-    /// ×Öµä±£´æÊÂ¼şÀàĞÍºÍÖ÷Ìâ,Ö÷ÌâÖĞÓÃList±£´æ¶©ÔÄÕß
+    /// å­—å…¸ä¿å­˜äº‹ä»¶ç±»å‹å’Œä¸»é¢˜,ä¸»é¢˜ä¸­ç”¨Listä¿å­˜è®¢é˜…è€…
     /// </summary>
     private Dictionary<GameEventType, IGameEventSubject> m_GameEvents = new Dictionary<GameEventType, IGameEventSubject>();
 
@@ -31,7 +32,8 @@ public class GameEventSystem : IGameSystem {
         //InitGameEvents();
     }
 
-    //Ìí¼ÓSubject·ÅÔÚGet·½·¨Àï,·ÅÔÚInitÀïµÄ»°»á¸ú×¢²áÊÂ¼ş·ÅÔÚInitÀïñîºÏ
+    //æ·»åŠ Subjectæ”¾åœ¨Getæ–¹æ³•é‡Œæ ¹æ®éœ€è¦åˆ›å»º,è‹¥æ˜¯æ”¾åœ¨Inité‡Œçš„è¯ä¼šè·Ÿæ³¨å†Œäº‹ä»¶æ”¾åœ¨Inité‡Œè€¦åˆ
+    //å› ä¸ºäº‹ä»¶Eventçš„åˆ›å»ºæ¯”è¾ƒæ•£,æ‰€ä»¥æ— æ³•ç¡®å®šåœ¨å“ªä¸ªInitä¸­,æ‰€ä»¥ä¸ºäº†é¿å…è€¦åˆè¿™é‡Œä½¿ç”¨åå°„æŠ€æœ¯è§„é¿Switch
     private void InitGameEvents()
     {
         m_GameEvents.Add(GameEventType.EnemyKilled, new EnemyKilledSubject());
@@ -56,9 +58,9 @@ public class GameEventSystem : IGameSystem {
     }
 
     /// <summary>
-    /// ·¢²¼ÏûÏ¢
+    /// å‘å¸ƒæ¶ˆæ¯
     /// </summary>
-    /// <param name="eventType"> ÏûÏ¢ÀàĞÍ</param>
+    /// <param name="eventType"> æ¶ˆæ¯ç±»å‹</param>
     public void NotyfySubject(GameEventType eventType)
     {
         IGameEventSubject sub = GetGameEventSub(eventType);
@@ -67,10 +69,10 @@ public class GameEventSystem : IGameSystem {
     }
 
     /// <summary>
-    /// ·¢²¼ÏûÏ¢,´ø²ÎÊı
+    /// å‘å¸ƒæ¶ˆæ¯,å¸¦å‚æ•°
     /// </summary>
-    /// <param name="eventType">ÏûÏ¢ÀàĞÍ</param>
-    /// <param name="paremter">ĞèÒª´«µİµÄ²ÎÊı(Object·½±ã×ª»»,±ÈÈçStruct»òÕßClass)</param>
+    /// <param name="eventType">æ¶ˆæ¯ç±»å‹</param>
+    /// <param name="paremter">éœ€è¦ä¼ é€’çš„å‚æ•°(Objectæ–¹ä¾¿è½¬æ¢,æ¯”å¦‚Structæˆ–è€…Class)</param>
     public void NotyfySubject(GameEventType eventType, System.Object paremter)
     {
         IGameEventSubject sub = GetGameEventSub(eventType);
@@ -82,22 +84,28 @@ public class GameEventSystem : IGameSystem {
     {
         if (!m_GameEvents.ContainsKey(eventType))
         {
-            switch (eventType)
-            {
-                case GameEventType.EnemyKilled:
-                    m_GameEvents.Add(GameEventType.EnemyKilled, new EnemyKilledSubject());
-                    break;
-                case GameEventType.SoldierKilled:
+            //aSong:è¿™ä¸ªå¯ä»¥ä½¿ç”¨åå°„,å› ä¸ºä»…éœ€è¦ä¸€æ¬¡æ€§
+            if(eventType != GameEventType.Null)
+                m_GameEvents.Add(eventType, Assembly.GetExecutingAssembly().CreateInstance(eventType.ToString() + "Subject") as IGameEventSubject);
+                //m_GameEvents.Add(eventType, Activator.CreateInstance( Type.GetType(eventType.ToString()+"Subject")) as IGameEventSubject);
+                /*
+                switch (eventType)
+                {
+                    case GameEventType.EnemyKilled:
+                        m_GameEvents.Add(GameEventType.EnemyKilled, new EnemyKilledSubject());
+                        break;
+                    case GameEventType.SoldierKilled:
                         m_GameEvents.Add(GameEventType.SoldierKilled, new SoldierKilledSubject());
-                    break;
-                case GameEventType.NewStage:
-                    m_GameEvents.Add(GameEventType.NewStage, new NewStageSubject());
-                    break;
-                default:
-                    Debug.LogError("Ã»ÓĞ¶ÔÓ¦ÊÂ¼şÀàĞÍ " + eventType + "Ö÷ÌâÀà");
-                    return null;
-            }
-            //return null;
+                        break;
+                    case GameEventType.NewStage:
+                        m_GameEvents.Add(GameEventType.NewStage, new NewStageSubject());
+                        break;
+                    default:
+                        Debug.LogError("æ²¡æœ‰å¯¹åº”äº‹ä»¶ç±»å‹ " + eventType + "ä¸»é¢˜ç±»");
+                        return null;
+                }
+                */
+                //return null;
         }
         return m_GameEvents[eventType];
     }

@@ -9,6 +9,7 @@ public class SoldierEnergyCostStrategy : IEnergyCountStrategy
     public override int GetCampUpgradeCost(SoldierType st, int lv)
     {
         int energy = 0;
+        //aSong:文档加载方式解决.将士兵和敌人动态的数据统一放在文件中.加载进来后用Dic来保存Struct
         switch (st)
         {
             case SoldierType.Rookie:
@@ -32,6 +33,7 @@ public class SoldierEnergyCostStrategy : IEnergyCountStrategy
     public override int GetSoldierTrainCost(SoldierType st, int lv)
     {
         int energy = 0;
+        //aSong:文档加载方式解决.将士兵和敌人动态的数据统一放在文件中.加载进来后用Dic来保存Struct
         switch (st)
         {
             case SoldierType.Rookie:
@@ -57,6 +59,7 @@ public class SoldierEnergyCostStrategy : IEnergyCountStrategy
     public override int GetWeaponUpgradeCost(WeaponType wt)
     {
         int energy = 0;
+        //aSong:文档加载方式解决.将士兵和敌人动态的数据统一放在文件中.加载进来后用Dic来保存Struct
         switch (wt)
         {
             case WeaponType.Gun:

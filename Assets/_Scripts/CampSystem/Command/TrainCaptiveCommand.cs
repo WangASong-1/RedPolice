@@ -24,6 +24,7 @@ public class TrainCaptiveCommand : ITrainCommand
     public override void Execute()
     {
         IEnemy enemy = null;
+        //使用泛型工厂解决
         switch (m_EnemyType)
         {
             case EnemyType.Elf:

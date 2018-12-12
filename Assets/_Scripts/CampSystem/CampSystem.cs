@@ -31,6 +31,7 @@ public class CampSystem : IGameSystem {
         string icon = null;
         Vector3 position = Vector3.zero;
         float trainTime = 0f;
+        //aSong:这个switch可以用文档加载的方式解决
         switch (soldierType)
         {
             case SoldierType.Rookie:
@@ -72,6 +73,7 @@ public class CampSystem : IGameSystem {
         string icon = null;
         Vector3 position = Vector3.zero;
         float trainTime = 0f;
+        //aSong:这个switch可以用文档加载的方式解决.将EnemyType转换为string类型,部分匹配字段
         switch (enemyType)
         {
             case EnemyType.Elf:

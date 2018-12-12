@@ -14,6 +14,8 @@ public class WeaponFactory : IWeaponFactory
         WeaponBaseAttr baseAttr = FactoryManager.AttrFactory.GetWeaponBaseAttr(weaponType);
         //Debug.Log("WeaponFactory::baseAttr.AssetName = " + baseAttr.AssetName);
         GameObject weaponGO = FactoryManager.AssetFactory.LoadWeapon(baseAttr.AssetName);
+        //aSong:文档加载方式解决.将士兵和敌人动态的数据统一放在文件中.加载进来后用Dic来保存Struct
+        //将这个工厂改为泛型工厂,然后通过Dic保存 weaponType和对应指定类型的泛型工厂来实例化
         switch (weaponType)
         {
             case WeaponType.Gun:

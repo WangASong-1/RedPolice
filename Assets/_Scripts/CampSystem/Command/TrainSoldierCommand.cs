@@ -28,6 +28,7 @@ public class TrainSoldierCommand : ITrainCommand
     /// </summary>
     public override void Execute()
     {
+        //aSong:这个switch使用 在工厂类中注册泛型工厂解决
         switch (m_SoldierType)
         {
             case SoldierType.Rookie:
