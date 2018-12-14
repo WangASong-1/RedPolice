@@ -42,13 +42,15 @@ public class GameFacade
     private EnergySystem m_EnergySystem;
     private GameEventSystem m_GameEventSystem;
     private StageSystem m_StageSystem;
+    private FileDataSystem m_FileDataSystem;
 
     private CampInfoUI m_CampInfoUI;
     private GamePauseUI m_GamePauseUI;
     private GameStateInfoUI m_GameStateInfoUI;
     private SoldierInfoUI m_SolderInfoUI;
 
-
+    //最好先Awake, 再Init. Awake中初始化数据, Init中再new对象之类的
+    //不然部分new对象比较分散的,就不好给System初始化进行排序,有耦合。比如EventSubject
     public void Init() {
         m_AchievementSystem = new AchievementSystem();
         m_CampSystem = new CampSystem();
@@ -56,13 +58,15 @@ public class GameFacade
         m_EnergySystem = new EnergySystem();
         m_GameEventSystem = new GameEventSystem();
         m_StageSystem = new StageSystem();
+        m_FileDataSystem = new FileDataSystem();
+
 
         m_CampInfoUI = new CampInfoUI();
         m_GamePauseUI = new GamePauseUI();
         m_GameStateInfoUI = new GameStateInfoUI();
         m_SolderInfoUI = new SoldierInfoUI();
 
-
+        m_FileDataSystem.Init();
         m_AchievementSystem.Init();
         m_CampSystem.Init();
         m_CharactorSystem.Init();
@@ -201,5 +205,9 @@ public class GameFacade
     public void RunVisitor(ICharacterVisitor visitor)
     {
         m_CharactorSystem.RunVisitor(visitor);
+    }
+
+    public Dictionary<string, CharacterBaseAttrModel> characterBaseAttr1 {
+        get { return m_FileDataSystem.BaseAttr; }
     }
 }

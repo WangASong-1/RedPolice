@@ -6,7 +6,7 @@ using UnityEngine;
 
 public interface IAttrFactory
 {
-    CharacterBaseAttr GetCharacterBaseAttr(System.Type t);
+    CharacterBaseAttr GetCharacterBaseAttr(string str);
     WeaponBaseAttr GetWeaponBaseAttr(WeaponType weaponType);
 }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using System.Reflection;
 
 /// <summary>
 /// 享元模式,将共有且不变的属性提出来
@@ -9,7 +10,7 @@ using UnityEngine;
 /// </summary>
 public class AttrFactory : IAttrFactory
 {
-    private Dictionary<Type, CharacterBaseAttr> mDic_CharacterBaseAttr;
+    private Dictionary<string, CharacterBaseAttr> mDic_CharacterBaseAttr;
     private Dictionary<WeaponType, WeaponBaseAttr> mDic_WeaponBaseAttr;
     public AttrFactory()
     {
@@ -19,16 +20,15 @@ public class AttrFactory : IAttrFactory
 
     private void InitCharacterBaseAttr()
     {
-        mDic_CharacterBaseAttr = new Dictionary<Type, CharacterBaseAttr>
-        {
-            { typeof(SoldierRookie), new CharacterBaseAttr("新兵士兵", 80, 2.5f, "RookieIcon", "Soldier2", 0) },
-            { typeof(SoldierSergeant), new CharacterBaseAttr("中士士兵", 90, 3f, "SergeantIcon", "Soldier3", 0) },
-            { typeof(SoldierCaptain), new CharacterBaseAttr("上尉士兵", 100, 3f, "CaptainIcon", "Soldier1", 0) },
-            { typeof(EnemyElf), new CharacterBaseAttr("小精灵", 100, 3f, "ElfIcon", "Enemy1", 0.2f) },
-            { typeof(EnemyOgre), new CharacterBaseAttr("食人魔", 120, 4f, "OgreIcon", "Enemy2", 0.3f) },
-            { typeof(EnemyTroll), new CharacterBaseAttr("巨魔", 200, 1f, "TrollIcon", "Enemy3", 0.4f) }
-        };
+        Dictionary<string, CharacterBaseAttrModel> baseAttr = GameFacade.Instance.characterBaseAttr1;
+        mDic_CharacterBaseAttr = new Dictionary<string, CharacterBaseAttr>();
 
+        foreach (var item in baseAttr)
+        {
+            mDic_CharacterBaseAttr.Add(item.Value.className, 
+                new CharacterBaseAttr(item.Value.descName, item.Value.maxHp, item.Value.moveSpeed, 
+                                    item.Value.iconSprite, item.Value.prefabName, item.Value.critRate));
+        }
     }
 
     private void InitWeaponBaseAttr()
@@ -40,13 +40,13 @@ public class AttrFactory : IAttrFactory
             { WeaponType.Rocket, new WeaponBaseAttr("火箭",40,8,"WeaponRocket")}
         };
     }
-    public CharacterBaseAttr GetCharacterBaseAttr(Type t)
+    public CharacterBaseAttr GetCharacterBaseAttr(string str)
     {
-        if (!mDic_CharacterBaseAttr.ContainsKey(t))
+        if (!mDic_CharacterBaseAttr.ContainsKey(str))
         {
-            Debug.LogError("AttrFactory::无法找到指定类型的属性 ---" + t.ToString());
+            Debug.LogError("AttrFactory::无法找到指定类型的属性 ---" + str);
         }
-        return mDic_CharacterBaseAttr[t];
+        return mDic_CharacterBaseAttr[str];
     }
 
     public WeaponBaseAttr GetWeaponBaseAttr(WeaponType weaponType)
