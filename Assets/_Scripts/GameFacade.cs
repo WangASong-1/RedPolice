@@ -207,7 +207,12 @@ public class GameFacade
         m_CharactorSystem.RunVisitor(visitor);
     }
 
-    public Dictionary<string, CharacterBaseAttrModel> characterBaseAttr1 {
-        get { return m_FileDataSystem.BaseAttr; }
+    public Dictionary<string, CharacterBaseAttrModel> CharacterBaseAttr1Model {
+        get { return m_FileDataSystem.CharacterBaseAttrModel; }
+    }
+
+    public Dictionary<WeaponType, WeaponBaseAttrModel> WeaponBaseAttrModel
+    {
+        get { return m_FileDataSystem.WeaponBaseAttrModel; }
     }
 }

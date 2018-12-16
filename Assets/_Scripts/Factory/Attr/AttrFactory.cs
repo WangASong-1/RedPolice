@@ -20,7 +20,7 @@ public class AttrFactory : IAttrFactory
 
     private void InitCharacterBaseAttr()
     {
-        Dictionary<string, CharacterBaseAttrModel> baseAttr = GameFacade.Instance.characterBaseAttr1;
+        Dictionary<string, CharacterBaseAttrModel> baseAttr = GameFacade.Instance.CharacterBaseAttr1Model;
         mDic_CharacterBaseAttr = new Dictionary<string, CharacterBaseAttr>();
 
         foreach (var item in baseAttr)
@@ -33,12 +33,21 @@ public class AttrFactory : IAttrFactory
 
     private void InitWeaponBaseAttr()
     {
-        mDic_WeaponBaseAttr = new Dictionary<WeaponType, WeaponBaseAttr>
+        //mDic_WeaponBaseAttr = new Dictionary<WeaponType, WeaponBaseAttr>
+        //{
+        //    { WeaponType.Gun, new WeaponBaseAttr("手枪",20,5,"WeaponGun")},
+        //    { WeaponType.Rifle, new WeaponBaseAttr("来福",30,7,"WeaponRifle")},
+        //    { WeaponType.Rocket, new WeaponBaseAttr("火箭",40,8,"WeaponRocket")}
+        //};
+
+        var baseAttr = GameFacade.Instance.WeaponBaseAttrModel;
+        mDic_WeaponBaseAttr = new Dictionary<WeaponType, WeaponBaseAttr>();
+
+        foreach (var item in baseAttr)
         {
-            { WeaponType.Gun, new WeaponBaseAttr("手枪",20,5,"WeaponGun")},
-            { WeaponType.Rifle, new WeaponBaseAttr("来福",30,7,"WeaponRifle")},
-            { WeaponType.Rocket, new WeaponBaseAttr("火箭",40,8,"WeaponRocket")}
-        };
+            mDic_WeaponBaseAttr.Add(item.Key,
+                new WeaponBaseAttr(item.Value.descName, item.Value.atk, item.Value.atkRange, item.Value.prefabName));
+        }
     }
     public CharacterBaseAttr GetCharacterBaseAttr(string str)
     {

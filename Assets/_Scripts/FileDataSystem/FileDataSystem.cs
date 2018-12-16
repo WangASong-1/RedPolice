@@ -21,25 +21,67 @@ public struct CharacterBaseAttrModel
     public float critRate;
 }
 
+public struct WeaponBaseAttrModel
+{
+    public string className;
+    public string descName;
+    public int atk;
+    public float atkRange;
+    public string prefabName;
+}
+
 /// <summary>
 /// 因为保存的是游戏中所有的数据(不同场景),所以需要单独的数据结构保存数据.
 /// </summary>
 public class FileDataSystem : IGameSystem
 {
-    private Dictionary<string, CharacterBaseAttrModel> mDic_BaseAttr;
+    private Dictionary<string, CharacterBaseAttrModel> mDic_CharacterBaseAttrModel;
+    private Dictionary<WeaponType, WeaponBaseAttrModel> mDic_WeaponBaseAttrModel;
 
-    public Dictionary<string, CharacterBaseAttrModel> BaseAttr
+    public Dictionary<string, CharacterBaseAttrModel> CharacterBaseAttrModel
     {
         get
         {
-            if (mDic_BaseAttr == null)
+            if (mDic_CharacterBaseAttrModel == null)
                 InitCharacterBaseAttrModel();
-            return mDic_BaseAttr;
+            return mDic_CharacterBaseAttrModel;
         }
     }
+
+    public Dictionary<WeaponType, WeaponBaseAttrModel> WeaponBaseAttrModel
+    {
+        get
+        {
+            if (mDic_WeaponBaseAttrModel == null)
+                InitWeaponBaseAttrModel();
+            return mDic_WeaponBaseAttrModel;
+        }
+    }
+
+    private void InitWeaponBaseAttrModel()
+    {
+        WeaponType type = WeaponType.MAX;
+        mDic_WeaponBaseAttrModel = new Dictionary<WeaponType, WeaponBaseAttrModel>();
+        JsonData jd = aSong_UnityJsonUtil.Read("WeaponBaseAttr", "");
+        WeaponBaseAttrModel baseAttr = new WeaponBaseAttrModel();
+        for (int i = 0; i < jd.Count; i++)
+        {
+            Debug.Log(jd[i]["className"].ToString());
+            baseAttr.className = jd[i]["className"].ToString();
+            baseAttr.descName = jd[i]["className"].ToString();
+            baseAttr.atk = int.Parse(jd[i]["atk"].ToString());
+            baseAttr.atkRange = float.Parse(jd[i]["atkRange"].ToString());
+            baseAttr.prefabName = jd[i]["prefabName"].ToString();
+
+            type = (WeaponType)Enum.Parse(typeof(WeaponType), baseAttr.className.Substring(6));
+
+            mDic_WeaponBaseAttrModel.Add(type, baseAttr);
+        }
+    }
+
     private void InitCharacterBaseAttrModel()
     {
-        mDic_BaseAttr = new Dictionary<string, CharacterBaseAttrModel>();
+        mDic_CharacterBaseAttrModel = new Dictionary<string, CharacterBaseAttrModel>();
         JsonData jd = aSong_UnityJsonUtil.Read("CharacterAttr", "");
 
         CharacterBaseAttrModel baseAttr = new CharacterBaseAttrModel();
@@ -53,7 +95,7 @@ public class FileDataSystem : IGameSystem
             baseAttr.iconSprite = jd[i]["iconSprite"].ToString();
             baseAttr.prefabName = jd[i]["prefabName"].ToString();
             baseAttr.critRate = float.Parse(jd[i]["critRate"].ToString());
-            mDic_BaseAttr.Add(baseAttr.className, baseAttr);
+            mDic_CharacterBaseAttrModel.Add(baseAttr.className, baseAttr);
         }
 
         //foreach (var item in mDic_BaseAttr)
@@ -78,7 +120,7 @@ public class FileDataSystem : IGameSystem
     public override void Release()
     {
         base.Release();
-        mDic_BaseAttr = null;
+        mDic_CharacterBaseAttrModel = null;
     }
 }
 
