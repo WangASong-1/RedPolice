@@ -7,6 +7,8 @@ using UnityEngine;
 /// 外观模式:为子系统中的一组接口提供一致的界面,以供上层(BattleState)调用
 /// 通过单例模式提供便利的访问方式,并限制了实例化
 /// 中介者模式：子系统之间不互相调用,而是通过GameFacade来间接调用其他系统的方法
+/// 游戏结束或者返回大厅的时候需要销毁该单例,否则会出错:ICharacter和IWeapon上的GameObject会丢失.
+///         但是因为引用还在,报空指针错误
 /// </summary>
 public class GameFacade
 {

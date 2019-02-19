@@ -133,6 +133,13 @@ public abstract class ICharacter {
         PlayAnim("move");
     }
 
+    public void StopMove()
+    {
+        //m_Nav.Stop();
+        m_Nav.SetDestination(m_GameObject.transform.position);
+        m_Nav.velocity = Vector3.zero;
+    }
+
     protected void DoPlaySound(string soundName)
     {
         AudioClip clip = FactoryManager.AssetFactory.LoadAudioClip(soundName);

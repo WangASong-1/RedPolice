@@ -13,7 +13,7 @@ public class SoldierIdleState : ISoldierState
 
     public override void Act(List<ICharacter> targets)
     {
-        
+        m_Charater.PlayAnim("Idle");
     }
 
     public override void Reason(List<ICharacter> targets)

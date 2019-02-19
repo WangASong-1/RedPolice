@@ -13,7 +13,7 @@ public enum SoldierTransition
 }
 
 /// <summary>
-/// 士兵状态ID
+/// 士兵当前状态ID
 /// </summary>
 public enum SoldierStateID
 {

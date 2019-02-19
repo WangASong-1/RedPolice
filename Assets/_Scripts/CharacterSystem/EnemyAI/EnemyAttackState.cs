@@ -15,6 +15,13 @@ public class EnemyAttackState : IEnemyState
     private float m_AttackTime = 1f;
     private float m_AttackTimer = 0;
 
+    public override void DoBeforeEntering()
+    {
+        base.DoBeforeEntering();
+        m_Charater.StopMove();
+
+    }
+
     public override void Act(List<ICharacter> targets)
     {
         if (targets.IsCountNull()) return;
