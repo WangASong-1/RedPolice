@@ -21,8 +21,6 @@ public class SoldierChaseState : ISoldierState
 
     public override void Reason(List<ICharacter> targets)
     {
-        //Debug.Log("SoldierChaseState::Reason ");
-
         if (targets == null && targets.Count == 0)
         {
             //Debug.Log("SoldierChaseState::Reason 追击状态切换到待机状态");

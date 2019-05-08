@@ -86,10 +86,11 @@ public class CampSystem : IGameSystem {
                 Debug.LogError("无法匹配到指定敌人类型 [" + enemyType + "]初始化兵营");
                 break;
         }
+        Debug.Log("gameObjectName = " + gameObjectName);
         gameObject = GameObject.Find(gameObjectName);
         position = gameObject.FindChildTraversing("TrainPoint").transform.position;
         CaptiveCamp camp = new CaptiveCamp(gameObject, name, icon, enemyType, position, trainTime);
-
+       
         gameObject.AddComponent<CampOnClick>().Camp = camp;
 
         mDic_CaptiveCamps.Add(enemyType, camp);

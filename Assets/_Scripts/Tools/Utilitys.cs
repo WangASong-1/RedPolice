@@ -63,7 +63,7 @@ public static class Utilitys
         child.transform.parent = parent.transform;
         child.transform.localPosition = Vector3.zero;
         child.transform.localEulerAngles = Vector3.zero;
-        child.transform.localEulerAngles = Vector3.zero;
+        child.transform.localScale = Vector3.one;
     }
 }
 

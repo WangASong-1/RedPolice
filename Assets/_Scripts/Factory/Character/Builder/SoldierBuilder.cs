@@ -64,6 +64,10 @@ public class SoldierBuilder : ICharacterBuilder
         m_PrefabName = baseAttr.PrefabName;
         ICharacterAttr attr = new SoldierAttr(new SoldierAttrStategy(), m_LV, baseAttr);
         m_Character.Attr = attr;
+        m_Character.AddSkill(SkillSystem.Instance.NewSkillINstance(1));
+        m_Character.AddSkill(SkillSystem.Instance.NewSkillINstance(2));
+        m_Character.AddSkill(SkillSystem.Instance.NewSkillINstance(3));
+        m_Character.AddSkill(SkillSystem.Instance.NewSkillINstance(4));
     }
 
     public override void AddGameObject()

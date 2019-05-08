@@ -59,7 +59,7 @@ public class StageSystem : IGameSystem {
     private void InitStageChain()
     {
         int lv = 1;
-        NormalStageHandler handler1 = new NormalStageHandler(this, lv++, 3, EnemyType.Elf, WeaponType.Gun, 3,GetRandomPos());
+        NormalStageHandler handler1 = new NormalStageHandler(this, lv++, 3, EnemyType.Elf, WeaponType.Gun, 1,GetRandomPos());
         NormalStageHandler handler2 = new NormalStageHandler(this, lv++, 6, EnemyType.Elf, WeaponType.Rifle, 3,GetRandomPos());
         NormalStageHandler handler3 = new NormalStageHandler(this, lv++, 9, EnemyType.Elf, WeaponType.Rocket, 3,GetRandomPos());
         NormalStageHandler handler4 = new NormalStageHandler(this, lv++, 13, EnemyType.Ogre, WeaponType.Gun, 4,GetRandomPos());

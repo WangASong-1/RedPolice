@@ -21,6 +21,20 @@ public abstract class ICharacter {
     //桥接模式==多肽?
     protected IWeapon m_Weapon;
 
+
+    public List<SkillInstance> Skills
+    {
+        get{
+            return m_Skills;
+        }
+    }
+
+    protected bool isExcuteSkill = false;
+    protected List<SkillInstance> m_Skills = new List<SkillInstance>();
+    protected SkillInstance m_CurSkill;
+    protected MoveCtrl m_MoveCtrl ;
+
+
     protected bool m_IsKilled = false;
     protected bool m_CanDestroy = false;
 
@@ -69,6 +83,7 @@ public abstract class ICharacter {
             m_Nav = m_GameObject.GetComponent<NavMeshAgent>();
             m_AudioSource = m_GameObject.GetComponent<AudioSource>();
             m_Anim = m_GameObject.GetComponentInChildren<Animation>();
+            m_MoveCtrl = new MoveCtrl(value);
         }
         get { return m_GameObject; }
     }
@@ -84,6 +99,9 @@ public abstract class ICharacter {
             }
         }
         m_Weapon.Update();
+        m_MoveCtrl.Update();
+        if (m_CurSkill != null)
+            m_CurSkill.Update(Time.deltaTime);
     }
     
     /// <summary>
@@ -100,8 +118,17 @@ public abstract class ICharacter {
     {
         m_Weapon.Fire(target.Position);
         m_GameObject.transform.LookAt(target.Position);
-        PlayAnim("attack");
         target.UnderAttack(m_Weapon.Atk + m_Attr.CritValue);
+        if (m_Skills.Count > 0)
+        {
+            m_Nav.enabled = false;
+
+            int index = Random.Range(0, m_Skills.Count);
+            m_Skills[index].Execute(Time.time);
+            Debug.Log("技能执行时间 Time.time = "+ Time.time);
+            Debug.Log("技能执行名字 m_Skills[index] = " + m_Skills[index].GetType());
+            m_CurSkill = m_Skills[index];
+        }
     }
 
     public virtual void UnderAttack(int damage)
@@ -127,14 +154,25 @@ public abstract class ICharacter {
         m_Anim.CrossFade(animName);
     }
 
+    public void AddDeltaPosition(Vector3 deltaVec)
+    {
+        m_MoveCtrl.AddDeltaPosition(deltaVec);
+    }
+
     public void MoveTo(Vector3 targetPosition)
     {
+        //能控制m_Nav 有：执行强制位移的技能.
+        if (m_CurSkill!=null && m_CurSkill.m_IsUsed) return;
+        if (!m_Nav.enabled)
+            m_Nav.enabled = true;
         m_Nav.SetDestination(targetPosition);
         PlayAnim("move");
     }
 
     public void StopMove()
     {
+        if (m_CurSkill != null && m_CurSkill.m_IsUsed) return;
+
         //m_Nav.Stop();
         m_Nav.SetDestination(m_GameObject.transform.position);
         m_Nav.velocity = Vector3.zero;
@@ -152,4 +190,17 @@ public abstract class ICharacter {
         effectGo.transform.position = Position;
         effectGo.AddComponent<DestroyForTime>();
     }
+
+    public void AddSkill(SkillInstance skill)
+    {
+        m_Skills.Add(skill);
+        skill.AttachToCharacter(this);
+    }
+
+    public void ResetSkill()
+    {
+        m_Skills.Clear();
+    }
+
+
 }

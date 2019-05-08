@@ -1,0 +1,20 @@
+skill(1)
+{
+	ForceMoveTrigger(0.1,1);
+	PlayAnimationTrigger(attack);
+}
+skill(2)
+{
+	ForceMoveTrigger(0.1,1);
+	PlayAnimationTrigger(attack);
+}
+skill(3)
+{
+	ForceMoveTrigger(0.1,1);
+	PlayAnimationTrigger(attack);
+}
+skill(4)
+{
+	ForceMoveTrigger(0.1,1);
+	PlayAnimationTrigger(attack);
+}

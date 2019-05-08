@@ -46,10 +46,11 @@ public class SoldierAttackState : ISoldierState
             return;
         }
         float distance = Vector3.Distance(m_Charater.Position, targets[0].Position);
+        Debug.Log("distance = "+ distance);
         //超出攻击范围,切换到追记状态
         if(distance > m_Charater.AtkRange)
         {
-            //Debug.Log("SoldierAttackState::Reason 攻击状态切换到追击状态");
+            Debug.Log("SoldierAttackState::Reason 攻击状态切换到追击状态");
             m_FSM.PerformTransition(SoldierTransition.SeeEnemy);
         }
     }

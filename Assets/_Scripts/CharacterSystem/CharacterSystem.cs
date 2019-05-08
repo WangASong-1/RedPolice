@@ -45,7 +45,7 @@ public class CharacterSystem : IGameSystem {
     {
         foreach (var enemy in m_Enemys)
         {
-            Debug.Log("死亡, 移除 " + enemy.GameObject.name);
+            //Debug.Log("死亡, 移除 " + enemy.GameObject.name);
 
             enemy.Update();
             enemy.UpdateFSMAI(m_Soldiers);
@@ -56,7 +56,7 @@ public class CharacterSystem : IGameSystem {
     {
         foreach (var soldier in m_Soldiers)
         {
-            Debug.Log("死亡, 移除 " + soldier.GameObject.name);
+            //Debug.Log("死亡, 移除 " + soldier.GameObject.name);
             soldier.Update();
             soldier.UpdateFSMAI(m_Enemys);
         }
