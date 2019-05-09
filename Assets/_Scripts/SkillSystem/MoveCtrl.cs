@@ -9,6 +9,12 @@ public class MoveCtrl {
     public Vector3 m_DeltaPosition;
     public NavMeshAgent m_NavAgent;
 
+    private bool m_MoveLock = false;
+    public bool MoveLock {
+        set { m_MoveLock = value; }
+        get { return m_MoveLock; }
+    }
+
     public MoveCtrl(GameObject gameObject)
     {
         m_GameObject = gameObject;
@@ -18,7 +24,7 @@ public class MoveCtrl {
     
     public void AddDeltaPosition(Vector3 vec)
     {
-        m_DeltaPosition = vec;
+        m_DeltaPosition += vec;
     }
 
     public void Update()

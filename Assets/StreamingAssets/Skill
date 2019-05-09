@@ -1,20 +1,22 @@
 skill(1)
 {
-	ForceMoveTrigger(0.1,1);
-	PlayAnimationTrigger(attack);
+	PlayAnimationTrigger(0.1,1,move);
 }
 skill(2)
 {
+	PlayAnimationTrigger(0.1,1,attack);
 	ForceMoveTrigger(0.1,1);
-	PlayAnimationTrigger(attack);
+	PlayAnimationTrigger(0.5,1,stand);
 }
 skill(3)
 {
+	PlayAnimationTrigger(0.1,1,attack);
 	ForceMoveTrigger(0.1,1);
-	PlayAnimationTrigger(attack);
+	PlayAnimationTrigger(0.5,1,stand);
 }
 skill(4)
 {
+	PlayAnimationTrigger(0.1,1,attack);
 	ForceMoveTrigger(0.1,1);
-	PlayAnimationTrigger(attack);
+	PlayAnimationTrigger(0.5,1,stand);
 }

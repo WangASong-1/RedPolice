@@ -151,12 +151,19 @@ public abstract class ICharacter {
     }
     public void PlayAnim(string animName)
     {
+        Debug.Log("animName = "+ animName);
         m_Anim.CrossFade(animName);
     }
 
     public void AddDeltaPosition(Vector3 deltaVec)
     {
         m_MoveCtrl.AddDeltaPosition(deltaVec);
+    }
+
+    public bool MoveLock
+    {
+        set { m_MoveCtrl.MoveLock = value; }
+        get { return m_MoveCtrl.MoveLock; }
     }
 
     public void MoveTo(Vector3 targetPosition)
@@ -166,7 +173,8 @@ public abstract class ICharacter {
         if (!m_Nav.enabled)
             m_Nav.enabled = true;
         m_Nav.SetDestination(targetPosition);
-        PlayAnim("move");
+        //todo 这里需要将移动的动画做成技能
+        //PlayAnim("move");
     }
 
     public void StopMove()

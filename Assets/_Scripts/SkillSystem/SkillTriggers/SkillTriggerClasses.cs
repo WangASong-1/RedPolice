@@ -9,6 +9,9 @@ public class ForceMoveTrigger : AbstrctSkillTrigger
 {
     private float m_MoveSpeed = 1f;
     private Vector3 m_Dir;
+    private Vector3 m_targetPos = new Vector3();
+    private Vector3 m_startPos = new Vector3();
+    private Vector3 m_lerpPos = new Vector3();
     public override ISkillTrigger Clone()
     {
         return null;
@@ -22,6 +25,8 @@ public class ForceMoveTrigger : AbstrctSkillTrigger
         m_LifeTime = 0f;
         Debug.Log("m_StartTime = " + m_StartTime);
         Debug.Log("m_EndTime = " + m_EndTime);
+        m_startPos = m_Character.Position;
+        m_targetPos = m_Character.Position + Vector3.right;
         return true;
     }
 
@@ -37,7 +42,6 @@ public class ForceMoveTrigger : AbstrctSkillTrigger
         string[] argArray = args.Split(',');
         m_StartTime = float.Parse( argArray[0]);
         m_EndTime = float.Parse(argArray[1]);
-     
     }
 
     public override void ReadFromXml()
@@ -54,7 +58,10 @@ public class ForceMoveTrigger : AbstrctSkillTrigger
             Exit();
             return;
         }
-        m_Character.AddDeltaPosition(Vector3.forward*30/(m_EndTime - m_StartTime) * dt);
+        m_lerpPos = Vector3.Lerp(m_startPos, m_targetPos, m_LifeTime - m_StartTime) - m_Character.Position;
+        m_lerpPos.y = 0;
+        Debug.Log("m_lerpPos  = "+ m_lerpPos);
+        m_Character.AddDeltaPosition(m_lerpPos);
     }
 
     public override void WriteIntoXml()
