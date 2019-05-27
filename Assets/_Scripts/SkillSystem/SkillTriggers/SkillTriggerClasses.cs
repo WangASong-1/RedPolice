@@ -21,21 +21,22 @@ public class ForceMoveTrigger : AbstrctSkillTrigger
     {
         Debug.Log("m_TypeName = " + m_TypeName);
         m_SkillInstance = instance;
-        //m_CurTime = curTime;
         m_LifeTime = 0f;
-        Debug.Log("m_StartTime = " + m_StartTime);
-        Debug.Log("m_EndTime = " + m_EndTime);
         m_startPos = m_Character.Position;
-        m_targetPos = m_Character.Position + Vector3.right;
+        m_targetPos = m_Character.Position + m_Character.GameObject.transform.forward*-1;
         return true;
     }
 
     public override bool Exit()
     {
-        m_SkillInstance.m_IsUsed = false;
+        //Debug.Log("ForceMoveTrigger = Exit");
         return base.Exit();
     }
 
+    /// <summary>
+    /// 技能从文件加载的时候Init
+    /// </summary>
+    /// <param name="args"></param>
     public override void Init(string args)
     {
         m_TypeName = "ForceMoveTrigger";
@@ -53,15 +54,18 @@ public class ForceMoveTrigger : AbstrctSkillTrigger
     {
         m_LifeTime += dt;
         //Debug.Log("m_LifeTime = "+ m_LifeTime);
-        if (m_LifeTime < m_StartTime || m_LifeTime > m_EndTime)
-        {
-            Exit();
+        if (m_LifeTime < m_StartTime)
             return;
-        }
+        
         m_lerpPos = Vector3.Lerp(m_startPos, m_targetPos, m_LifeTime - m_StartTime) - m_Character.Position;
         m_lerpPos.y = 0;
-        Debug.Log("m_lerpPos  = "+ m_lerpPos);
+        //Debug.Log("m_lerpPos  = "+ m_lerpPos);
         m_Character.AddDeltaPosition(m_lerpPos);
+
+        if (m_LifeTime >= m_EndTime)
+        {
+            Exit();
+        }
     }
 
     public override void WriteIntoXml()

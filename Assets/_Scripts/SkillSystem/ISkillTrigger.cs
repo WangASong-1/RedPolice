@@ -22,6 +22,7 @@ public interface ISkillTrigger {
     /// <returns></returns>
     bool Enter(SkillInstance instance, float curTime);
     float GetStartTime();
+    float GetEndTime();
     bool IsExecuted();
     SkilltriggerExecuteType GetExecuteType();
     string GetTypeName();

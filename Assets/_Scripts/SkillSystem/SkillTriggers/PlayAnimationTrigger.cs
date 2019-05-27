@@ -22,7 +22,38 @@ public class PlayAnimationTrigger : AbstrctSkillTrigger
         Debug.Log("m_TypeName = " + m_TypeName);
         m_CurTime = curTime;
         m_LifeTime = 0f;
+        m_IsPlayed = false;
         return false;
+    }
+
+    public override void Update(float dt)
+    {
+        m_LifeTime += dt;
+        //Debug.Log("PlayAnimationTrigger m_LifeTime = " + m_LifeTime);
+        if (m_LifeTime < m_StartTime)
+            return;
+
+        if (!m_IsPlayed)
+            PlayAnimation();
+
+        if (m_LifeTime >= m_EndTime)
+        {
+            Exit();
+        }
+    }
+
+    void PlayAnimation()
+    {
+        m_IsPlayed = true;
+        m_SkillInstance.Character.PlayAnim(m_AnimationName);
+
+    }
+
+    public override bool Exit()
+    {
+        //Debug.Log("PlayAnimationTrigger Exit ");
+
+        return base.Exit();
     }
 
     public override void Init(string args)
@@ -39,18 +70,6 @@ public class PlayAnimationTrigger : AbstrctSkillTrigger
         //throw new System.NotImplementedException();
     }
 
-    public override void Update(float dt)
-    {
-        m_LifeTime += dt;
-        //Debug.Log("m_LifeTime = "+ m_LifeTime);
-        if (m_LifeTime < m_StartTime || m_LifeTime > m_EndTime)
-        {
-            Exit();
-            return;
-        }
-        if (!m_IsPlayed)
-            m_SkillInstance.Character.PlayAnim(m_AnimationName);
-    }
 
     public override void WriteIntoXml()
     {

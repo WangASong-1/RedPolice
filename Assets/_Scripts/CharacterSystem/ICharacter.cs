@@ -114,8 +114,10 @@ public abstract class ICharacter {
     /// </summary>
     /// <param name="visitor"></param>
     public abstract void RunVisitor(ICharacterVisitor visitor);
-    public void Attack(ICharacter target)
+    public bool Attack(ICharacter target)
     {
+        if (m_CurSkill != null && !m_CurSkill.IsSkillEnd)
+            return false;
         m_Weapon.Fire(target.Position);
         m_GameObject.transform.LookAt(target.Position);
         target.UnderAttack(m_Weapon.Atk + m_Attr.CritValue);
@@ -123,12 +125,15 @@ public abstract class ICharacter {
         {
             m_Nav.enabled = false;
 
-            int index = Random.Range(0, m_Skills.Count);
+            int index = Random.Range(1, m_Skills.Count);
             m_Skills[index].Execute(Time.time);
-            Debug.Log("技能执行时间 Time.time = "+ Time.time);
+            Debug.Log("技能执行时间 index = " + index);
             Debug.Log("技能执行名字 m_Skills[index] = " + m_Skills[index].GetType());
             m_CurSkill = m_Skills[index];
+            return true;
         }
+        return false;
+
     }
 
     public virtual void UnderAttack(int damage)
@@ -151,7 +156,7 @@ public abstract class ICharacter {
     }
     public void PlayAnim(string animName)
     {
-        Debug.Log("animName = "+ animName);
+        //Debug.Log("animName = "+ animName);
         m_Anim.CrossFade(animName);
     }
 
@@ -169,17 +174,29 @@ public abstract class ICharacter {
     public void MoveTo(Vector3 targetPosition)
     {
         //能控制m_Nav 有：执行强制位移的技能.
-        if (m_CurSkill!=null && m_CurSkill.m_IsUsed) return;
+        if (m_CurSkill!=null && !m_CurSkill.IsSkillEnd) return;
         if (!m_Nav.enabled)
             m_Nav.enabled = true;
         m_Nav.SetDestination(targetPosition);
         //todo 这里需要将移动的动画做成技能
         //PlayAnim("move");
+
+        if (m_CurSkill != null && !m_CurSkill.IsSkillEnd)
+            return;
+        if (m_Skills.Count > 0)
+        {
+            int index = 0;
+            m_Skills[index].Execute(Time.time);
+            Debug.Log("技能执行时间 index = " + index);
+            Debug.Log("技能执行名字 m_Skills[index] = " + m_Skills[index].GetType());
+            m_CurSkill = m_Skills[index];
+        }
+        return;
     }
 
     public void StopMove()
     {
-        if (m_CurSkill != null && m_CurSkill.m_IsUsed) return;
+        if (m_CurSkill != null && !m_CurSkill.IsSkillEnd) return;
 
         //m_Nav.Stop();
         m_Nav.SetDestination(m_GameObject.transform.position);

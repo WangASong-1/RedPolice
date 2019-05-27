@@ -20,7 +20,10 @@ public class SoldierAttackState : ISoldierState
         base.DoBeforeEntering();
         m_Charater.StopMove();
     }
-
+    
+    /// <summary>
+    /// 攻击状态机的攻击.
+    /// </summary>
     public override void Act(List<ICharacter> targets)
     {
         if (targets.IsCountNull())
@@ -28,11 +31,13 @@ public class SoldierAttackState : ISoldierState
             return;
         }
         m_AttackTimer += Time.deltaTime;
+        //这里是攻击CD
         if (m_AttackTimer >= m_AttackTime)
         {
-            m_AttackTimer = 0f;
+            //攻击成功，才返回，不然一直处于可以攻击状态
             //Debug.Log("SoldierAttackState::Act 战士攻击");
-            m_Charater.Attack(targets[0]);
+            if(m_Charater.Attack(targets[0]))
+                m_AttackTimer = 0f;
         }
     }
 

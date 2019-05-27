@@ -46,6 +46,11 @@ public abstract class AbstrctSkillTrigger : ISkillTrigger {
         return m_StartTime;
     }
 
+    public float GetEndTime()
+    {
+        return m_EndTime;
+    }
+
     public bool IsExecuted()
     {
         return m_IsExecuted;
@@ -72,4 +77,6 @@ public abstract class AbstrctSkillTrigger : ISkillTrigger {
     {
         m_Character = character;
     }
+
+   
 }
