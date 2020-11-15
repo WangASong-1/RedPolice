@@ -22,7 +22,7 @@ public class SkillInstance {
     {
         foreach(ISkillTrigger trigger in other.m_SkillTriggers)
         {
-            m_SkillTriggers.Add(trigger);
+            m_SkillTriggers.Add(trigger.Clone());
             m_SkillEndTime = trigger.GetEndTime() > m_SkillEndTime ? trigger.GetEndTime() : m_SkillEndTime;
             Debug.Log("rigger.GetEndTime() = "+ trigger.GetEndTime());
         }
@@ -72,8 +72,8 @@ public class SkillInstance {
         {
             trigger.Enter(this,curTime);
         }
-        Debug.Log("m_SkillRunTime = " + m_SkillRunTime);
-        Debug.Log("m_SkillEndTime = " + m_SkillEndTime);
+        //Debug.Log("m_SkillRunTime = " + m_SkillRunTime);
+        //Debug.Log("m_SkillEndTime = " + m_SkillEndTime);
         m_SkillRunTime = 0f;
         b_IsSkillEnd = false;
 
@@ -86,7 +86,7 @@ public class SkillInstance {
 
         if (m_SkillRunTime > m_SkillEndTime)
         {
-            Debug.Log("技能执行完了 -----------------------");
+            //Debug.Log("技能执行完了 -----------------------");
             b_IsSkillEnd = true;
             return;
         }
@@ -107,5 +107,4 @@ public class SkillInstance {
         }
         return count;
     }
-
 }

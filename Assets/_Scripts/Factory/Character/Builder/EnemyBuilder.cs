@@ -16,6 +16,8 @@ public class EnemyBuilder : ICharacterBuilder
         m_PrefabName = baseAttr.PrefabName;
         ICharacterAttr attr = new EnemyAttr(new EnemyAttrStategy(), m_LV, baseAttr);
         m_Character.Attr = attr;
+
+       
     }
 
     public override void AddGameObject()
@@ -25,6 +27,13 @@ public class EnemyBuilder : ICharacterBuilder
         GameObject characterGO = FactoryManager.AssetFactory.LoadEnemy(m_PrefabName);
         characterGO.transform.position = m_SpawnPosition;
         m_Character.GameObject = characterGO;
+
+        //享元模式优化成员属性
+        m_Character.AddSkill(SkillSystem.Instance.NewSkillINstance(1));
+        m_Character.AddSkill(SkillSystem.Instance.NewSkillINstance(2));
+        //m_Character.AddSkill(SkillSystem.Instance.NewSkillINstance(2));
+        //m_Character.AddSkill(SkillSystem.Instance.NewSkillINstance(3));
+        //m_Character.AddSkill(SkillSystem.Instance.NewSkillINstance(4));
     }
 
     public override void AddInCharacterSystem()

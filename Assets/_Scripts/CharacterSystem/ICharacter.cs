@@ -121,14 +121,15 @@ public abstract class ICharacter {
         m_Weapon.Fire(target.Position);
         m_GameObject.transform.LookAt(target.Position);
         target.UnderAttack(m_Weapon.Atk + m_Attr.CritValue);
+        Debug.Log("-----------------------开始执行技能的角色 = " + m_GameObject.name);
         if (m_Skills.Count > 0)
         {
             m_Nav.enabled = false;
 
-            int index = Random.Range(1, m_Skills.Count);
+            int index = 1;// Random.Range(1, m_Skills.Count);
             m_Skills[index].Execute(Time.time);
-            Debug.Log("技能执行时间 index = " + index);
-            Debug.Log("技能执行名字 m_Skills[index] = " + m_Skills[index].GetType());
+            Debug.Log("随机 技能执行时间 index = " + index);
+            Debug.Log("随机 技能执行名字 m_Skills[index] = " + m_Skills[index].GetType());
             m_CurSkill = m_Skills[index];
             return true;
         }
@@ -173,16 +174,18 @@ public abstract class ICharacter {
 
     public void MoveTo(Vector3 targetPosition)
     {
+        if (m_CurSkill != null && !m_CurSkill.IsSkillEnd)
+            return;
+
         //能控制m_Nav 有：执行强制位移的技能.
         if (m_CurSkill!=null && !m_CurSkill.IsSkillEnd) return;
         if (!m_Nav.enabled)
             m_Nav.enabled = true;
         m_Nav.SetDestination(targetPosition);
-        //todo 这里需要将移动的动画做成技能
-        //PlayAnim("move");
+        
 
-        if (m_CurSkill != null && !m_CurSkill.IsSkillEnd)
-            return;
+        Debug.Log("执行技能的角色 = " + m_GameObject.name);
+
         if (m_Skills.Count > 0)
         {
             int index = 0;

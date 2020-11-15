@@ -55,7 +55,7 @@ public class SoldierAttackState : ISoldierState
         //超出攻击范围,切换到追记状态
         if(distance > m_Charater.AtkRange)
         {
-            Debug.Log("SoldierAttackState::Reason 攻击状态切换到追击状态");
+            //Debug.Log("SoldierAttackState::Reason 攻击状态切换到追击状态");
             m_FSM.PerformTransition(SoldierTransition.SeeEnemy);
         }
     }

@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using UnityEngine;
 
 /// <summary>
-/// 代理模式做新的资源加载方法的测试
+/// 代理模式做新的资源加载方法的测试. 测试代码，测试新的内容的可行性(同接口，方便接入).
 /// 我看着咋那么像装饰模式
 /// 这里做的是流程控制,但其实也是增强功能.我分不出
 /// </summary>
 public class ResourcesAssetProxyFactory : IAssetFactory
 {
-    private ResourcesAssetFactory m_ResourcesAssetFactory = new ResourcesAssetFactory();
+    private ResourcesAssetFactory mAssetFactory = new ResourcesAssetFactory();
 
     private Dictionary<string, GameObject> m_Soldiers = new Dictionary<string, GameObject>();
     private Dictionary<string, GameObject> m_Enemys = new Dictionary<string, GameObject>();
@@ -30,7 +31,7 @@ public class ResourcesAssetProxyFactory : IAssetFactory
         }
         else
         {
-            GameObject go = m_ResourcesAssetFactory.LoadEffect(name);
+            GameObject go = mAssetFactory.LoadEffect(name);
             m_Effects.Add(name, go);
             go.transform.position = Vector3.up * -2f;
             return GameObject.Instantiate(go);
@@ -45,10 +46,10 @@ public class ResourcesAssetProxyFactory : IAssetFactory
         }
         else
         {
-            GameObject go = m_ResourcesAssetFactory.LoadEnemy(name);
-            m_Enemys.Add(name, go);
-            go.transform.position = Vector3.up * -2f;
-            return GameObject.Instantiate(go);
+            GameObject asset = mAssetFactory.LoadAsset(Path.Combine(ResourcesAssetFactory.EnemyPath ,name)) as GameObject;
+            m_Enemys.Add(name, asset);
+            asset.transform.position = Vector3.up * -2f;
+            return GameObject.Instantiate(asset);
         }
     }
 
@@ -65,11 +66,10 @@ public class ResourcesAssetProxyFactory : IAssetFactory
         }
         else
         {
-            GameObject go = m_ResourcesAssetFactory.LoadSoldier(name);
-            m_Soldiers.Add(name, go);
-            go.transform.position = Vector3.up * -2f;
-            return GameObject.Instantiate(go);
-            //return go;
+            GameObject asset = mAssetFactory.LoadAsset(Path.Combine(ResourcesAssetFactory.SoldierPath , name)) as GameObject;
+            m_Soldiers.Add(name, asset);
+            asset.transform.position = Vector3.up * -2f;
+            return GameObject.Instantiate(asset);
         }
     }
 
@@ -83,10 +83,10 @@ public class ResourcesAssetProxyFactory : IAssetFactory
         }
         else
         {
-            GameObject go = m_ResourcesAssetFactory.LoadWeapon(name);
-            m_Weapons.Add(name,go);
-            go.transform.position = Vector3.up * -2f;
-            return GameObject.Instantiate(go);
+            GameObject asset = mAssetFactory.LoadAsset(Path.Combine(ResourcesAssetFactory.WeaponPath , name)) as GameObject;
+            m_Weapons.Add(name, asset);
+            asset.transform.position = Vector3.up * -2f;
+            return GameObject.Instantiate(asset);
         }
     }
 
@@ -99,7 +99,7 @@ public class ResourcesAssetProxyFactory : IAssetFactory
         }
         else
         {
-            Sprite go = m_ResourcesAssetFactory.LoadSprite(name);
+            Sprite go = mAssetFactory.LoadSprite(name);
             m_Sprites.Add(name, go);
             return go;
         }
@@ -113,7 +113,7 @@ public class ResourcesAssetProxyFactory : IAssetFactory
         }
         else
         {
-            AudioClip go = m_ResourcesAssetFactory.LoadAudioClip(name);
+            AudioClip go = mAssetFactory.LoadAudioClip(name);
             m_AudioClips.Add(name, go);
             return go;
         }

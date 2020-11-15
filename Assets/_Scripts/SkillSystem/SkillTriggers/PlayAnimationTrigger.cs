@@ -13,13 +13,18 @@ public class PlayAnimationTrigger : AbstrctSkillTrigger
 
     public override ISkillTrigger Clone()
     {
-        return null;
+        PlayAnimationTrigger trigger = new PlayAnimationTrigger();
+        trigger.m_AnimationId = m_AnimationId;
+        trigger.m_AnimationName = m_AnimationName;
+        trigger.m_TypeName = m_TypeName;
+        trigger.m_IsPlayed = false;
+        return trigger;
     }
 
     public override bool Enter(SkillInstance instance, float curTime)
     {
         base.Enter(instance, curTime);
-        Debug.Log("m_TypeName = " + m_TypeName);
+        //Debug.Log("m_TypeName = " + m_TypeName);
         m_CurTime = curTime;
         m_LifeTime = 0f;
         m_IsPlayed = false;
@@ -28,6 +33,8 @@ public class PlayAnimationTrigger : AbstrctSkillTrigger
 
     public override void Update(float dt)
     {
+        if (!m_IsExecuting)
+            return;
         m_LifeTime += dt;
         //Debug.Log("PlayAnimationTrigger m_LifeTime = " + m_LifeTime);
         if (m_LifeTime < m_StartTime)
@@ -45,7 +52,8 @@ public class PlayAnimationTrigger : AbstrctSkillTrigger
     void PlayAnimation()
     {
         m_IsPlayed = true;
-        m_SkillInstance.Character.PlayAnim(m_AnimationName);
+        m_Character.PlayAnim(m_AnimationName);
+        ///m_SkillInstance.Character.PlayAnim(m_AnimationName);
 
     }
 

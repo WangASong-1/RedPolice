@@ -48,6 +48,11 @@ public class SkillSystem : Singleton<SkillSystem> {
         return false;
     }
 
+    /// <summary>
+    /// 装配技能时候调用，这里其实是从初始化的时候克隆的
+    /// </summary>
+    /// <param name="skillBaseId"></param>
+    /// <returns></returns>
     public SkillInstance NewSkillINstance(int skillBaseId)
     {
         SkillInstance skillInstance = new SkillInstance(mDic_BaseSkillInstance[skillBaseId]);

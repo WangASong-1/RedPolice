@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 播放动画的技能原子
+/// 强制位移原子
 /// </summary>
 public class ForceMoveTrigger : AbstrctSkillTrigger
 {
@@ -14,22 +14,30 @@ public class ForceMoveTrigger : AbstrctSkillTrigger
     private Vector3 m_lerpPos = new Vector3();
     public override ISkillTrigger Clone()
     {
-        return null;
+        ForceMoveTrigger trigger = new ForceMoveTrigger();
+        trigger.m_MoveSpeed = m_MoveSpeed;
+        trigger.m_TypeName = m_TypeName;
+        trigger.m_StartTime = m_StartTime;
+        trigger.m_EndTime = m_EndTime;
+        return trigger;
     }
 
     public override bool Enter(SkillInstance instance, float curTime)
     {
-        Debug.Log("m_TypeName = " + m_TypeName);
+        //Debug.Log("ForceMoveTrigger Enter m_TypeName = " + m_TypeName);
         m_SkillInstance = instance;
         m_LifeTime = 0f;
+        m_lerpPos = Vector3.zero;
         m_startPos = m_Character.Position;
         m_targetPos = m_Character.Position + m_Character.GameObject.transform.forward*-1;
+        m_IsExecuting = true;
         return true;
     }
 
     public override bool Exit()
     {
-        //Debug.Log("ForceMoveTrigger = Exit");
+        Debug.Log("ForceMoveTrigger = Exit");
+        m_IsExecuting = false;
         return base.Exit();
     }
 
@@ -41,8 +49,12 @@ public class ForceMoveTrigger : AbstrctSkillTrigger
     {
         m_TypeName = "ForceMoveTrigger";
         string[] argArray = args.Split(',');
+        Debug.Log("args = " + args);
         m_StartTime = float.Parse( argArray[0]);
+     
         m_EndTime = float.Parse(argArray[1]);
+        Debug.Log("m_StartTime = " + m_StartTime);
+        Debug.Log("m_EndTime = " + m_EndTime);
     }
 
     public override void ReadFromXml()
@@ -52,14 +64,14 @@ public class ForceMoveTrigger : AbstrctSkillTrigger
 
     public override void Update(float dt)
     {
-        m_LifeTime += dt;
-        //Debug.Log("m_LifeTime = "+ m_LifeTime);
-        if (m_LifeTime < m_StartTime)
+        if (!m_IsExecuting)
             return;
-        
+        m_LifeTime += dt;
+        //不在生命周期内，不update
+        if (m_LifeTime < m_StartTime || m_LifeTime > m_EndTime)
+            return;
         m_lerpPos = Vector3.Lerp(m_startPos, m_targetPos, m_LifeTime - m_StartTime) - m_Character.Position;
         m_lerpPos.y = 0;
-        //Debug.Log("m_lerpPos  = "+ m_lerpPos);
         m_Character.AddDeltaPosition(m_lerpPos);
 
         if (m_LifeTime >= m_EndTime)

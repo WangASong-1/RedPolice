@@ -64,19 +64,22 @@ public class SoldierBuilder : ICharacterBuilder
         m_PrefabName = baseAttr.PrefabName;
         ICharacterAttr attr = new SoldierAttr(new SoldierAttrStategy(), m_LV, baseAttr);
         m_Character.Attr = attr;
-        m_Character.AddSkill(SkillSystem.Instance.NewSkillINstance(1));
-        m_Character.AddSkill(SkillSystem.Instance.NewSkillINstance(2));
-        m_Character.AddSkill(SkillSystem.Instance.NewSkillINstance(3));
-        m_Character.AddSkill(SkillSystem.Instance.NewSkillINstance(4));
     }
 
     public override void AddGameObject()
     {
+        Debug.Log("_-------------------------------- soldierBuilder m_PrefabName = "+ m_PrefabName);
         //创建角色游戏物体
         //1.加载;2.实例化  
         GameObject characterGO = FactoryManager.AssetFactory.LoadSoldier(m_PrefabName);
         characterGO.transform.position = m_SpawnPosition;
         m_Character.GameObject = characterGO;
+
+        //todo 这里可以将 创建技能改为从池加载
+        m_Character.AddSkill(SkillSystem.Instance.NewSkillINstance(1));
+        m_Character.AddSkill(SkillSystem.Instance.NewSkillINstance(2));
+        //m_Character.AddSkill(SkillSystem.Instance.NewSkillINstance(3));
+        //m_Character.AddSkill(SkillSystem.Instance.NewSkillINstance(4));
     }
 
     public override void AddInCharacterSystem()
